@@ -1,4 +1,4 @@
 package ru.practicum.shareit.requests;
 
-public class ItemRequest {
+public class ItemRequestDto {
 }
