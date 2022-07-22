@@ -28,17 +28,17 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItem(@PathVariable long itemId){
+    public ItemDto getItem(@PathVariable long itemId) {
         return itemService.getItem(itemId);
     }
 
     @GetMapping
-    public Collection<ItemDto> getItems(@RequestHeader("X-Sharer-User-Id") Long userId){
+    public Collection<ItemDto> getItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemService.getAllItem(userId);
     }
 
     @GetMapping("/search")
-    public Collection<ItemDto> searchItems(@RequestParam String text){
+    public Collection<ItemDto> searchItems(@RequestParam String text) {
         return itemService.searchItems(text);
     }
 }

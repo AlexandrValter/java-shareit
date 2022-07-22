@@ -29,7 +29,7 @@ public class ItemStorageImpl implements ItemStorage {
 
     @Override
     public ItemDto updateItem(Long userId, ItemDto itemDto, long itemId) {
-        if (items.get(userId)!=null) {
+        if (items.get(userId) != null) {
             if (items.get(userId).contains(ItemMapper.toItem(getItem(itemId)))) {
                 Item newItem = ItemMapper.toItem(getItem(itemId));
                 if (itemDto.getId() != null) {
@@ -82,12 +82,11 @@ public class ItemStorageImpl implements ItemStorage {
     @Override
     public Collection<ItemDto> searchItems(String text) {
         List<ItemDto> findItems = new ArrayList<>();
-        for (List<Item> itemList : items.values()){
-            for (Item item : itemList){
+        for (List<Item> itemList : items.values()) {
+            for (Item item : itemList) {
                 if (item.getName().toLowerCase().contains(text.toLowerCase())
-                        ||item.getDescription().toLowerCase().contains(text.toLowerCase())
-                        &&item.getAvailable())
-                {
+                        || item.getDescription().toLowerCase().contains(text.toLowerCase())
+                        && item.getAvailable()) {
                     findItems.add(ItemMapper.toItemDto(item));
                 }
             }
