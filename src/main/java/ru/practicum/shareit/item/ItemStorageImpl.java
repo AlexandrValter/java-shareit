@@ -14,24 +14,23 @@ public class ItemStorageImpl implements ItemStorage {
     private Long id;
 
     @Override
-    public ItemDto addItem(Long userId, ItemDto itemDto) {
-        itemDto.setId(makeId());
-        Item item = ItemMapper.toItem(itemDto);
+    public ItemDto addItem(Long userId, Item item) {
+        item.setId(makeId());
         if (items.containsKey(userId)) {
             items.get(userId).add(item);
         } else {
             items.put(userId, new ArrayList<>());
             items.get(userId).add(item);
         }
-        log.info("Пользователь id={} добавил новую вещь id={}", userId, itemDto.getId());
-        return itemDto;
+        log.info("Пользователь id={} добавил новую вещь id={}", userId, item.getId());
+        return ItemMapper.toItemDto(item);
     }
 
     @Override
     public ItemDto updateItem(Long userId, ItemDto itemDto, long itemId) {
         if (items.get(userId) != null) {
-            if (items.get(userId).contains(ItemMapper.toItem(getItem(itemId)))) {
-                Item newItem = ItemMapper.toItem(getItem(itemId));
+            if (items.get(userId).contains(getItem(itemId))) {
+                Item newItem = getItem(itemId);
                 if (itemDto.getId() != null) {
                     newItem.setId(itemDto.getId());
                 }
@@ -49,7 +48,8 @@ public class ItemStorageImpl implements ItemStorage {
                 log.info("Пользователь id={} изменил информацию о своей вещи id={}", userId, itemId);
                 return ItemMapper.toItemDto(newItem);
             } else {
-                throw new NotFoundItemException(String.format("У пользователя с id = %s нет вещи с id = %s", userId, itemId));
+                throw new NotFoundItemException(String.format("У пользователя с id = %s нет вещи с id = %s",
+                        userId, itemId));
             }
         } else {
             throw new NotFoundUserException(String.format("Пользователь с id = %s еще не добавлял вещей", userId));
@@ -57,7 +57,7 @@ public class ItemStorageImpl implements ItemStorage {
     }
 
     @Override
-    public ItemDto getItem(long itemId) {
+    public Item getItem(long itemId) {
         Item item = null;
         while (item == null) {
             for (List<Item> itemList : items.values()) {
@@ -68,7 +68,7 @@ public class ItemStorageImpl implements ItemStorage {
             }
         }
         log.info("Запрошена вещь id={}", itemId);
-        return ItemMapper.toItemDto(item);
+        return item;
     }
 
     @Override

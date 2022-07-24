@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.UserStorage;
 
 import java.util.ArrayList;
@@ -19,7 +20,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto createItem(Long userId, ItemDto itemDto) {
         if (userStorage.getUser(userId) != null) {
-            return itemStorage.addItem(userId, itemDto);
+            Item item = ItemMapper.toItem(itemDto);
+            item.setOwner(UserMapper.toUser(userStorage.getUser(userId)));
+            return itemStorage.addItem(userId, item);
         } else {
             return null;
         }
@@ -36,7 +39,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getItem(long itemId) {
-        return itemStorage.getItem(itemId);
+        return ItemMapper.toItemDto(itemStorage.getItem(itemId));
     }
 
     @Override
