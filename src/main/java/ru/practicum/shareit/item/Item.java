@@ -5,17 +5,26 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.requests.ItemRequest;
 import ru.practicum.shareit.user.User;
 
+import javax.persistence.*;
+
 @Data
 @NoArgsConstructor
+@Entity
+@Table(name = "items")
 public class Item {
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(nullable = false)
     private String name;
     private String description;
     private Boolean available;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User owner;
+    @Transient
     private ItemRequest request;
 
-    public Item(Long id, String name, String description, Boolean available) {
+    public Item(long id, String name, String description, Boolean available) {
         this.id = id;
         this.name = name;
         this.description = description;
