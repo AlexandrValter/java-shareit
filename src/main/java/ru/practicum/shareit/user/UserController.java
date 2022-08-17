@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -26,13 +27,13 @@ public class UserController {
     }
 
     @GetMapping(value = {"/{userId}"})
-    public UserDto getUser(@PathVariable Long userId) {
-        return userService.getUser(userId);
+    public UserDto getUser(@PathVariable long userId) {
+        return UserMapper.toUserDto(userService.getUser(userId));
     }
 
     @GetMapping()
     public Collection<UserDto> getAllUsers() {
-        return userService.getAllUsers();
+        return userService.getAllUsers().stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 
     @DeleteMapping("/{userId}")
