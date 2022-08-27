@@ -21,16 +21,14 @@ public class ItemController {
     @PostMapping
     public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") long userId,
                               @Valid @RequestBody ItemDto itemDto) {
-        Item item = ItemMapper.toItem(itemDto);
-        return ItemMapper.toItemDto(itemService.createItem(item, userId));
+        return ItemMapper.toItemDto(itemService.createItem(itemDto, userId));
     }
 
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") long userId,
                               @RequestBody ItemDto itemDto,
                               @PathVariable long itemId) {
-        Item item = ItemMapper.toItem(itemDto);
-        return ItemMapper.toItemDto(itemService.updateItem(userId, item, itemId));
+        return ItemMapper.toItemDto(itemService.updateItem(userId, itemDto, itemId));
     }
 
     @GetMapping("/{itemId}")
@@ -40,13 +38,17 @@ public class ItemController {
     }
 
     @GetMapping
-    public Collection<ItemDtoWithBooking> getItems(@RequestHeader("X-Sharer-User-Id") long userId) {
-        return itemService.getAllItem(userId);
+    public Collection<ItemDtoWithBooking> getItems(@RequestHeader("X-Sharer-User-Id") long userId,
+                                                   @RequestParam(defaultValue = "0") int from,
+                                                   @RequestParam(defaultValue = "10") int size) {
+        return itemService.getAllItem(userId, from, size);
     }
 
     @GetMapping("/search")
-    public Collection<ItemDto> searchItems(@RequestParam String text) {
-        return itemService.searchItems(text).stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
+    public Collection<ItemDto> searchItems(@RequestParam String text,
+                                           @RequestParam(defaultValue = "0") int from,
+                                           @RequestParam(defaultValue = "10") int size) {
+        return itemService.searchItems(text, from, size).stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
 
     @PostMapping("/{itemId}/comment")

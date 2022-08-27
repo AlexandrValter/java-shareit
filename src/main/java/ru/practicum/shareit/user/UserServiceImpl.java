@@ -22,7 +22,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(long userId, User user) {
-        User updateUser = userRepository.findById(userId).orElseThrow();
+        User updateUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundUserException(String.format("Пользователь id = %s не найден", userId)));
         updateFields(user, updateUser);
         log.info("Обновлена информация о пользователе id = {}", userId);
         return userRepository.save(updateUser);

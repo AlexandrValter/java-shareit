@@ -21,7 +21,7 @@ public class Item {
     private Boolean available;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User owner;
-    @Transient
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ItemRequest request;
 
     public Item(long id, String name, String description, Boolean available) {

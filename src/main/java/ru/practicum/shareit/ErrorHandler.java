@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.shareit.booking.NotAvailableBookingException;
 import ru.practicum.shareit.booking.NotFoundBookingException;
-import ru.practicum.shareit.item.NotAvailableItemException;
 import ru.practicum.shareit.item.NotFoundItemException;
-import ru.practicum.shareit.user.DuplicateEmailException;
+import ru.practicum.shareit.requests.NotFoundRequestException;
 import ru.practicum.shareit.user.NotFoundUserException;
 
 import java.util.HashMap;
@@ -19,11 +18,6 @@ import java.util.Map;
 public class ErrorHandler {
 
     @ExceptionHandler
-    public ResponseEntity<Error> catchDuplicateEmail(DuplicateEmailException e) {
-        return new ResponseEntity<>(new Error(HttpStatus.CONFLICT.value(), e.getMessage()), HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler
     public ResponseEntity<Error> catchNotFoundUser(NotFoundUserException e) {
         return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
     }
@@ -31,11 +25,6 @@ public class ErrorHandler {
     @ExceptionHandler
     public ResponseEntity<Error> catchNotFoundItemException(NotFoundItemException e) {
         return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<Error> catchNotAvailableItemException(NotAvailableItemException e) {
-        return new ResponseEntity<>(new Error(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
@@ -52,6 +41,11 @@ public class ErrorHandler {
 
     @ExceptionHandler
     public ResponseEntity<Error> catchNotFoundBookingException(NotFoundBookingException e) {
+        return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Error> catchNotFoundRequestException(NotFoundRequestException e) {
         return new ResponseEntity<>(new Error(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
