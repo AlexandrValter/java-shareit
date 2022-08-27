@@ -85,8 +85,8 @@ public class ItemRequestServiceUnitTest {
         Mockito
                 .when(itemRequestRepository.findAllByRequestorId(1L))
                 .thenReturn(List.of(itemRequest2, itemRequest1));
-        List<ItemRequestDto> list1 = Stream.of(itemRequest1, itemRequest2).
-                map(ItemRequestMapper::toItemRequestDto)
+        List<ItemRequestDto> list1 = Stream.of(itemRequest1, itemRequest2)
+                .map(ItemRequestMapper::toItemRequestDto)
                 .collect(Collectors.toList());
         List<ItemRequestDto> list2 = Stream.of(itemRequest2, itemRequest1)
                 .map(ItemRequestMapper::toItemRequestDto)
@@ -119,8 +119,8 @@ public class ItemRequestServiceUnitTest {
         Mockito
                 .when(itemRepository.findItemsByRequest(1L))
                 .thenReturn(List.of());
-        List<ItemRequestDto> list1 = Stream.of(itemRequest1, itemRequest2).
-                map(ItemRequestMapper::toItemRequestDto)
+        List<ItemRequestDto> list1 = Stream.of(itemRequest1, itemRequest2)
+                .map(ItemRequestMapper::toItemRequestDto)
                 .collect(Collectors.toList());
         list1.get(1).setItems(Stream.of(item1, item2).map(ItemMapper::toItemDto).collect(Collectors.toSet()));
         Assertions.assertEquals(list1, service.getRequestsByOwner(1L));

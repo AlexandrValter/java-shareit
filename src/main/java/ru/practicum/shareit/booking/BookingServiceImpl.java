@@ -117,10 +117,10 @@ public class BookingServiceImpl implements BookingService {
                     case ALL:
                         return bookingRepository.findByBooker_Id(bookingDtoState.getUserId(), pageable).getContent();
                     default:
-                        return bookingRepository.findBookingByBookerAndStatus
-                                (bookingDtoState.getUserId(),
-                                        Status.valueOf(bookingDtoState.getState().toString()),
-                                        pageable).getContent();
+                        return bookingRepository.findBookingByBookerAndStatus(
+                                bookingDtoState.getUserId(),
+                                Status.valueOf(bookingDtoState.getState().toString()),
+                                pageable).getContent();
                 }
             } else {
                 throw new ArithmeticException("Ошибка в индекса первого элемента или количества элементов для отображения");

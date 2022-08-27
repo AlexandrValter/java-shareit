@@ -94,8 +94,8 @@ public class ItemServiceImpl implements ItemService {
             int page = from / size;
             Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
             List<Item> items = itemRepository.findAllByOwnerId(userId, pageable).getContent();
-            List<ItemDtoWithBooking> itemsDto = items.stream().
-                    map(ItemMapper::toItemDtoWithBooking)
+            List<ItemDtoWithBooking> itemsDto = items.stream()
+                    .map(ItemMapper::toItemDtoWithBooking)
                     .collect(Collectors.toList());
             for (int i = 0; i < itemsDto.size(); i++) {
                 setBookings(itemsDto.get(i), items.get(i).getId());
