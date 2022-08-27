@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -20,7 +19,6 @@ import static org.hamcrest.Matchers.equalTo;
         properties = "db.name=test",
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@TestPropertySource(locations = "classpath:test.properties")
 public class UserServiceTest {
     private final EntityManager em;
     private final UserService userService;
@@ -29,7 +27,9 @@ public class UserServiceTest {
 
     @BeforeEach
     public void restartIdentity() {
-        em.createNativeQuery("TRUNCATE table users restart identity CASCADE;").executeUpdate();
+        em.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE;").executeUpdate();
+        em.createNativeQuery("TRUNCATE table users restart identity;").executeUpdate();
+        em.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE;").executeUpdate();
         user1.setName("Test1");
         user1.setEmail("test1@ya.ru");
     }

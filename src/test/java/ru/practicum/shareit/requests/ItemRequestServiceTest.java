@@ -30,7 +30,6 @@ import static org.hamcrest.Matchers.notNullValue;
         properties = "db.name=test",
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@TestPropertySource(locations = "classpath:test.properties")
 public class ItemRequestServiceTest {
     private final EntityManager em;
     private final ItemRequestService service;
@@ -44,7 +43,11 @@ public class ItemRequestServiceTest {
 
     @BeforeEach
     public void restartIdentity() {
-        em.createNativeQuery("TRUNCATE table users restart identity CASCADE;").executeUpdate();
+        em.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE;").executeUpdate();
+        em.createNativeQuery("TRUNCATE table items restart identity;").executeUpdate();
+        em.createNativeQuery("TRUNCATE table users restart identity;").executeUpdate();
+        em.createNativeQuery("TRUNCATE table requests restart identity;").executeUpdate();
+        em.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE;").executeUpdate();
         itemRequest1.setDescription("Test request 1");
         itemRequest2.setDescription("Test request 2");
     }

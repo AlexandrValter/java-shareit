@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingDto;
@@ -33,7 +32,6 @@ import static org.hamcrest.Matchers.*;
         properties = "db.name=test",
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@TestPropertySource(locations = "classpath:test.properties")
 public class ItemServiceTest {
     private final EntityManager em;
     private final ItemService itemService;
@@ -58,11 +56,17 @@ public class ItemServiceTest {
 
     @BeforeEach
     public void restartIdentity() {
-        em.createNativeQuery("TRUNCATE table items restart identity CASCADE;").executeUpdate();
-        em.createNativeQuery("TRUNCATE table users restart identity CASCADE;").executeUpdate();
+        em.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE;").executeUpdate();
+        em.createNativeQuery("TRUNCATE table items restart identity;").executeUpdate();
+        em.createNativeQuery("TRUNCATE table users restart identity;").executeUpdate();
+        em.createNativeQuery("TRUNCATE table booking restart identity;").executeUpdate();
+        em.createNativeQuery("TRUNCATE table requests restart identity;").executeUpdate();
+        em.createNativeQuery("TRUNCATE table comments restart identity;").executeUpdate();
+        em.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE;").executeUpdate();
         user1.setName("User1");
         user1.setEmail("user1@test.ru");
         user2.setName("User2");
+        user2.setEmail("user2@test.ru");
         user2.setEmail("user2@test.ru");
         userService.createUser(user1);
         userService.createUser(user2);
