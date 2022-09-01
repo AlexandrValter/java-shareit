@@ -6,10 +6,23 @@ public class ItemMapper {
     }
 
     public static ItemDto toItemDto(Item item) {
-        return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable());
+        ItemDto itemDto = new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable());
+        if (item.getRequest() != null) {
+            itemDto.setRequestId(item.getRequest().getId());
+        }
+        return itemDto;
     }
 
     public static ItemDtoWithBooking toItemDtoWithBooking(Item item) {
-        return new ItemDtoWithBooking(item.getId(), item.getName(), item.getDescription(), item.getAvailable());
+        ItemDtoWithBooking itemDtoWithBooking = new ItemDtoWithBooking(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable()
+        );
+        if (item.getRequest() != null) {
+            itemDtoWithBooking.setRequestId(item.getRequest().getId());
+        }
+        return itemDtoWithBooking;
     }
 }

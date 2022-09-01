@@ -1,11 +1,13 @@
 package ru.practicum.shareit.item;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
+@NoArgsConstructor
 public class ItemDto {
     private long id;
     @NotEmpty
@@ -14,7 +16,7 @@ public class ItemDto {
     private String description;
     @NotNull
     private Boolean available;
-    private long requestId;
+    private Long requestId;
 
     public ItemDto(long id, String name, String description, Boolean available) {
         this.id = id;
