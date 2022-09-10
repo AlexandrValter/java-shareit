@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.ShareItApp;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -17,7 +18,8 @@ import static org.hamcrest.Matchers.equalTo;
 @Transactional
 @SpringBootTest(
         properties = "db.name=test",
-        webEnvironment = SpringBootTest.WebEnvironment.NONE)
+        webEnvironment = SpringBootTest.WebEnvironment.NONE,
+        classes = ShareItApp.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserServiceTest {
     private final EntityManager em;

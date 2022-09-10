@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +12,6 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
-@Slf4j //todo: logs
 @Validated
 public class UserController {
     private final UserClient userClient;
@@ -34,13 +32,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getALlUsers(){
+    public ResponseEntity<Object> getALlUsers() {
         return userClient.getAllUsers();
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> deleteUser (@PathVariable long userId){
+    public ResponseEntity<Object> deleteUser(@PathVariable long userId) {
         return userClient.deleteUser(userId);
     }
-
 }

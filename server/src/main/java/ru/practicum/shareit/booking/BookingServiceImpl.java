@@ -101,30 +101,26 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> getAllBooking(BookingDtoState bookingDtoState, int from, int size) {
         if (userRepository.findById(bookingDtoState.getUserId()).isPresent()) {
-            if (size > 0 && from >= 0) {
-                int page = from / size;
-                Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
-                log.info("Запрошены бронирования пользователя id = {}", bookingDtoState.getUserId());
-                switch (bookingDtoState.getState()) {
-                    case PAST:
-                        return bookingRepository.findByBooker_IdAndEndIsBefore(bookingDtoState.getUserId(),
-                                LocalDateTime.now(), pageable).getContent();
-                    case FUTURE:
-                        return bookingRepository.findByBooker_IdAndStartIsAfter(bookingDtoState.getUserId(),
-                                LocalDateTime.now(), pageable).getContent();
-                    case CURRENT:
-                        return bookingRepository.findCurrentBooking(bookingDtoState.getUserId(),
-                                LocalDateTime.now(), pageable).getContent();
-                    case ALL:
-                        return bookingRepository.findByBooker_Id(bookingDtoState.getUserId(), pageable).getContent();
-                    default:
-                        return bookingRepository.findBookingByBookerAndStatus(
-                                bookingDtoState.getUserId(),
-                                Status.valueOf(bookingDtoState.getState().toString()),
-                                pageable).getContent();
-                }
-            } else {
-                throw new ArithmeticException("Ошибка в индекса первого элемента или количества элементов для отображения");
+            int page = from / size;
+            Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
+            log.info("Запрошены бронирования пользователя id = {}", bookingDtoState.getUserId());
+            switch (bookingDtoState.getState()) {
+                case PAST:
+                    return bookingRepository.findByBooker_IdAndEndIsBefore(bookingDtoState.getUserId(),
+                            LocalDateTime.now(), pageable).getContent();
+                case FUTURE:
+                    return bookingRepository.findByBooker_IdAndStartIsAfter(bookingDtoState.getUserId(),
+                            LocalDateTime.now(), pageable).getContent();
+                case CURRENT:
+                    return bookingRepository.findCurrentBooking(bookingDtoState.getUserId(),
+                            LocalDateTime.now(), pageable).getContent();
+                case ALL:
+                    return bookingRepository.findByBooker_Id(bookingDtoState.getUserId(), pageable).getContent();
+                default:
+                    return bookingRepository.findBookingByBookerAndStatus(
+                            bookingDtoState.getUserId(),
+                            Status.valueOf(bookingDtoState.getState().toString()),
+                            pageable).getContent();
             }
         } else {
             throw new NotFoundUserException(String.format("Пользователь id = %s не найден", bookingDtoState.getUserId()));
@@ -134,29 +130,25 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> getAllBookingByOwner(BookingDtoState bookingDtoState, int from, int size) {
         if (userRepository.findById(bookingDtoState.getUserId()).isPresent()) {
-            if (size > 0 && from >= 0) {
-                int page = from / size;
-                Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
-                log.info("Запрошены бронирования вещей, принадлежащих пользователю id = {}", bookingDtoState.getUserId());
-                switch (bookingDtoState.getState()) {
-                    case PAST:
-                        return bookingRepository.findBookingByOwnerPast(bookingDtoState.getUserId(),
-                                LocalDateTime.now(), pageable).getContent();
-                    case FUTURE:
-                        return bookingRepository.findBookingByOwnerFuture(bookingDtoState.getUserId(),
-                                LocalDateTime.now(), pageable).getContent();
-                    case CURRENT:
-                        return bookingRepository.findBookingByOwnerCurrent(bookingDtoState.getUserId(),
-                                LocalDateTime.now(), pageable).getContent();
-                    case ALL:
-                        return bookingRepository.findBookingByOwner(bookingDtoState.getUserId(), pageable).getContent();
-                    default:
-                        return bookingRepository.findBookingByOwnerAndStatus(
-                                bookingDtoState.getUserId(),
-                                Status.valueOf(bookingDtoState.getState().toString()), pageable).getContent();
-                }
-            } else {
-                throw new ArithmeticException("Ошибка в индекса первого элемента или количества элементов для отображения");
+            int page = from / size;
+            Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
+            log.info("Запрошены бронирования вещей, принадлежащих пользователю id = {}", bookingDtoState.getUserId());
+            switch (bookingDtoState.getState()) {
+                case PAST:
+                    return bookingRepository.findBookingByOwnerPast(bookingDtoState.getUserId(),
+                            LocalDateTime.now(), pageable).getContent();
+                case FUTURE:
+                    return bookingRepository.findBookingByOwnerFuture(bookingDtoState.getUserId(),
+                            LocalDateTime.now(), pageable).getContent();
+                case CURRENT:
+                    return bookingRepository.findBookingByOwnerCurrent(bookingDtoState.getUserId(),
+                            LocalDateTime.now(), pageable).getContent();
+                case ALL:
+                    return bookingRepository.findBookingByOwner(bookingDtoState.getUserId(), pageable).getContent();
+                default:
+                    return bookingRepository.findBookingByOwnerAndStatus(
+                            bookingDtoState.getUserId(),
+                            Status.valueOf(bookingDtoState.getState().toString()), pageable).getContent();
             }
         } else {
             throw new NotFoundUserException(String.format("Пользователь id = %s не найден", bookingDtoState.getUserId()));

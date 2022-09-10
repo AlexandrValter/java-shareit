@@ -64,22 +64,16 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDto> getAllRequest(long userId, int from, int size) {
         if (userRepository.findById(userId).isPresent()) {
-            if (size > 0 && from >= 0) {
-                int page = from / size;
-                Pageable pageable = PageRequest.of(page, size, Sort.by("created").descending());
-                log.info("Пользователь id = {} запросил все запросы", userId);
-                return itemRequestRepository.findAll(pageable).get()
-                        .filter(s -> s.getRequestor().getId() != userId)
-                        .map(ItemRequestMapper::toItemRequestDto)
-                        .peek(s -> s.setItems(itemRepository.findItemsByRequest(s.getId()).stream()
-                                .map(ItemMapper::toItemDto)
-                                .collect(Collectors.toSet())))
-                        .collect(Collectors.toList());
-            } else {
-                throw new ArithmeticException(
-                        "Неверное значение индекса первого элемента или количества элементов для отображения"
-                );
-            }
+            int page = from / size;
+            Pageable pageable = PageRequest.of(page, size, Sort.by("created").descending());
+            log.info("Пользователь id = {} запросил все запросы", userId);
+            return itemRequestRepository.findAll(pageable).get()
+                    .filter(s -> s.getRequestor().getId() != userId)
+                    .map(ItemRequestMapper::toItemRequestDto)
+                    .peek(s -> s.setItems(itemRepository.findItemsByRequest(s.getId()).stream()
+                            .map(ItemMapper::toItemDto)
+                            .collect(Collectors.toSet())))
+                    .collect(Collectors.toList());
         } else {
             throw new NotFoundUserException(String.format("Не найден пользователь id = %s", userId));
         }

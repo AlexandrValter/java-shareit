@@ -79,45 +79,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void test2_tryCreateNotValidItem() {
-        ItemDto emptyName = new ItemDto(1L, "", "description", true);
-        ItemDto nullDescription = new ItemDto();
-        nullDescription.setId(2L);
-        nullDescription.setName("Name");
-        nullDescription.setAvailable(false);
-        ItemDto nullAvailable = new ItemDto();
-        nullAvailable.setId(3L);
-        nullAvailable.setName("Name");
-        nullAvailable.setDescription("Description");
-        try {
-            mvc.perform(post("/items")
-                            .content(mapper.writeValueAsString(emptyName))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .header("X-Sharer-User-Id", 1))
-                    .andExpect(status().is(400));
-            mvc.perform(post("/items")
-                            .content(mapper.writeValueAsString(nullDescription))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .header("X-Sharer-User-Id", 1))
-                    .andExpect(status().is(400));
-            mvc.perform(post("/items")
-                            .content(mapper.writeValueAsString(nullAvailable))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .header("X-Sharer-User-Id", 1))
-                    .andExpect(status().is(400));
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Test
-    public void test3_tryUpdateItem() {
+    public void test2_tryUpdateItem() {
         ItemDto update = new ItemDto();
         update.setName("Update");
         update.setDescription("Update");
@@ -144,7 +106,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void test4_tryGetItem() {
+    public void test3_tryGetItem() {
         when(itemService.getItem(Mockito.anyLong(), Mockito.anyLong()))
                 .thenReturn(item1);
         try {
@@ -162,7 +124,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void test5_tryGetAllItems() {
+    public void test4_tryGetAllItems() {
         when(itemService.getAllItem(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(List.of(item1, item2));
         try {
@@ -170,6 +132,8 @@ public class ItemControllerTest {
                             .characterEncoding(StandardCharsets.UTF_8)
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
+                            .param("from", "0")
+                            .param("size", "5")
                             .header("X-Sharer-User-Id", 1))
                     .andExpect(status().isOk())
                     .andExpect(content().json(mapper.writeValueAsString(List.of(item1, item2))));
@@ -179,7 +143,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void test6_trySearchItems() {
+    public void test5_trySearchItems() {
         when(itemService.searchItems(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(List.of(ItemMapper.toItem(itemDto)));
         String text = "Test_item1";
@@ -189,7 +153,9 @@ public class ItemControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
                             .header("X-Sharer-User-Id", 1)
-                            .param("text", text))
+                            .param("text", text)
+                            .param("from", "0")
+                            .param("size", "5"))
                     .andExpect(status().isOk())
                     .andExpect(content().json(mapper.writeValueAsString(List.of(itemDto))));
         } catch (Exception e) {
@@ -198,7 +164,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void test7_tryCreateComment() {
+    public void test6_tryCreateComment() {
         Comment comment = new Comment();
         comment.setText("Comment text");
         comment.setItem(ItemMapper.toItem(itemDto));
@@ -219,33 +185,6 @@ public class ItemControllerTest {
                     .andExpect(jsonPath("$.text", is(comment.getText())))
                     .andExpect(jsonPath("$.authorName", is(comment.getAuthor().getName())))
                     .andExpect(jsonPath("$.created", is(notNullValue())));
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Test
-    public void test8_tryCreateCommentWithIncorrectText() {
-        try {
-            mvc.perform(post("/items/{itemId}/comment", 1)
-                            .content(mapper.writeValueAsString(commentBody))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .header("X-Sharer-User-Id", 1))
-                    .andExpect(status().is(400));
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        commentBody.setText("");
-        try {
-            mvc.perform(post("/items/{itemId}/comment", 1)
-                            .content(mapper.writeValueAsString(commentBody))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .header("X-Sharer-User-Id", 1))
-                    .andExpect(status().is(400));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

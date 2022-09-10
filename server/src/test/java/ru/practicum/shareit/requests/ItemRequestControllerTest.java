@@ -83,32 +83,7 @@ public class ItemRequestControllerTest {
     }
 
     @Test
-    public void test2_tryCreateRequestWhenItemRequestIsNotValid() {
-        ItemRequest requestEmptyBody = new ItemRequest();
-        ItemRequest requestNullBody = new ItemRequest();
-        requestEmptyBody.setDescription("");
-        try {
-            mvc.perform(post("/requests")
-                            .content(mapper.writeValueAsString(requestEmptyBody))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .header("X-Sharer-User-Id", 1))
-                    .andExpect(status().is(400));
-            mvc.perform(post("/requests")
-                            .content(mapper.writeValueAsString(requestNullBody))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .header("X-Sharer-User-Id", 1))
-                    .andExpect(status().is(400));
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Test
-    public void test3_tryGetRequestsByOwner() {
+    public void test2_tryGetRequestsByOwner() {
         item.setRequestId(2L);
         List<ItemRequestDto> requests = Stream.of(request1, request2)
                 .map(ItemRequestMapper::toItemRequestDto)
@@ -139,7 +114,7 @@ public class ItemRequestControllerTest {
     }
 
     @Test
-    public void test4_tryGetAllRequests() {
+    public void test3_tryGetAllRequests() {
         item.setRequestId(2L);
         List<ItemRequestDto> requests = Stream.of(request1, request2)
                 .map(ItemRequestMapper::toItemRequestDto)
@@ -170,7 +145,7 @@ public class ItemRequestControllerTest {
     }
 
     @Test
-    public void test5_tryGetRequestById() {
+    public void test4_tryGetRequestById() {
         item.setRequestId(2L);
         ItemRequestDto requestDto = ItemRequestMapper.toItemRequestDto(request2);
         requestDto.setItems(Set.of(item));

@@ -430,26 +430,6 @@ public class BookingServiceUnitTest {
     }
 
     @Test
-    public void test24_tryGetAllBookingWhenSizeOrFromIsNotValid() {
-        BookingDtoState bookingDtoState = new BookingDtoState(user1.getId(), State.CANCELED);
-        Mockito
-                .when(userRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.of(user1));
-        ArithmeticException thrown1 = Assertions.assertThrows(ArithmeticException.class, () ->
-                service.getAllBooking(bookingDtoState, 0, 0));
-        ArithmeticException thrown2 = Assertions.assertThrows(ArithmeticException.class, () ->
-                service.getAllBooking(bookingDtoState, -1, 0));
-        ArithmeticException thrown3 = Assertions.assertThrows(ArithmeticException.class, () ->
-                service.getAllBooking(bookingDtoState, -1, 2));
-        Assertions.assertEquals("Ошибка в индекса первого элемента или количества элементов для отображения",
-                thrown1.getMessage());
-        Assertions.assertEquals("Ошибка в индекса первого элемента или количества элементов для отображения",
-                thrown2.getMessage());
-        Assertions.assertEquals("Ошибка в индекса первого элемента или количества элементов для отображения",
-                thrown3.getMessage());
-    }
-
-    @Test
     public void test25_tryGetAllBookingByOwnerWhenStateIsPast() {
         BookingDtoState bookingDtoState = new BookingDtoState(user1.getId(), State.PAST);
         Pageable pageable = PageRequest.of(from / size, size, Sort.by("start").ascending());
@@ -634,25 +614,5 @@ public class BookingServiceUnitTest {
                 service.getAllBookingByOwner(bookingDtoState, from, size));
         Assertions.assertEquals("Пользователь id = 1 не найден",
                 thrown.getMessage());
-    }
-
-    @Test
-    public void test34_tryGetAllBookingWhenSizeOrFromIsNotValid() {
-        BookingDtoState bookingDtoState = new BookingDtoState(user1.getId(), State.CANCELED);
-        Mockito
-                .when(userRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.of(user1));
-        ArithmeticException thrown1 = Assertions.assertThrows(ArithmeticException.class, () ->
-                service.getAllBookingByOwner(bookingDtoState, 0, 0));
-        ArithmeticException thrown2 = Assertions.assertThrows(ArithmeticException.class, () ->
-                service.getAllBookingByOwner(bookingDtoState, -1, 0));
-        ArithmeticException thrown3 = Assertions.assertThrows(ArithmeticException.class, () ->
-                service.getAllBookingByOwner(bookingDtoState, -1, 2));
-        Assertions.assertEquals("Ошибка в индекса первого элемента или количества элементов для отображения",
-                thrown1.getMessage());
-        Assertions.assertEquals("Ошибка в индекса первого элемента или количества элементов для отображения",
-                thrown2.getMessage());
-        Assertions.assertEquals("Ошибка в индекса первого элемента или количества элементов для отображения",
-                thrown3.getMessage());
     }
 }

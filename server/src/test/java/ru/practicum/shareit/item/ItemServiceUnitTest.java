@@ -259,28 +259,6 @@ public class ItemServiceUnitTest {
     }
 
     @Test
-    public void test14_trySearchItemsWhenSizeOrFromIsIncorrect() {
-        ArithmeticException thrown1 = Assertions.assertThrows(ArithmeticException.class, () ->
-                service.searchItems("Item1", 0, 0));
-        ArithmeticException thrown2 = Assertions.assertThrows(ArithmeticException.class, () ->
-                service.searchItems("Item1", -1, 1));
-        ArithmeticException thrown3 = Assertions.assertThrows(ArithmeticException.class, () ->
-                service.searchItems("Item1", -1, 0));
-        Assertions.assertEquals(
-                "Неверное значение индекса первого элемента или количества элементов для отображения",
-                thrown1.getMessage()
-        );
-        Assertions.assertEquals(
-                "Неверное значение индекса первого элемента или количества элементов для отображения",
-                thrown2.getMessage()
-        );
-        Assertions.assertEquals(
-                "Неверное значение индекса первого элемента или количества элементов для отображения",
-                thrown3.getMessage()
-        );
-    }
-
-    @Test
     public void test15_tryCreateComment() {
         Booking booking = new Booking();
         booking.setItem(item1);

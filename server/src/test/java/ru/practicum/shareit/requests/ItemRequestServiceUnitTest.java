@@ -167,22 +167,7 @@ public class ItemRequestServiceUnitTest {
     }
 
     @Test
-    public void test8_checkGetAllRequestsWhenFromOrSizeIsIncorrect() {
-        Mockito
-                .when(userRepository.findById(1L))
-                .thenReturn(Optional.of(user1));
-        ArithmeticException ex = Assertions.assertThrows(ArithmeticException.class,
-                () -> service.getAllRequest(1L, -1, 10));
-        Assertions.assertEquals(ex.getMessage(),
-                "Неверное значение индекса первого элемента или количества элементов для отображения");
-        Assertions.assertThrows(ArithmeticException.class,
-                () -> service.getAllRequest(1L, 0, 0));
-        Assertions.assertThrows(ArithmeticException.class,
-                () -> service.getAllRequest(1L, 1, -1));
-    }
-
-    @Test
-    public void test9_checkGetRequestById() {
+    public void test8_checkGetRequestById() {
         Mockito
                 .when(userRepository.findById(1L))
                 .thenReturn(Optional.of(user1));
@@ -199,7 +184,7 @@ public class ItemRequestServiceUnitTest {
     }
 
     @Test
-    public void test10_checkGetRequestByIdWhenUserIdIsIncorrect() {
+    public void test9_checkGetRequestByIdWhenUserIdIsIncorrect() {
         Mockito
                 .when(userRepository.findById(1L))
                 .thenReturn(Optional.empty());
@@ -209,7 +194,7 @@ public class ItemRequestServiceUnitTest {
     }
 
     @Test
-    public void test11_checkGetRequestByIdWhenRequestIdIsIncorrect() {
+    public void test10_checkGetRequestByIdWhenRequestIdIsIncorrect() {
         Mockito
                 .when(userRepository.findById(1L))
                 .thenReturn(Optional.of(user1));

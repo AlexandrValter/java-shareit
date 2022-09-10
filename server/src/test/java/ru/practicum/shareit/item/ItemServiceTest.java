@@ -6,10 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.ShareItApp;
 import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingService;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.comment.Comment;
 import ru.practicum.shareit.comment.CommentDtoFromRequest;
 import ru.practicum.shareit.comment.CommentMapper;
@@ -32,7 +33,8 @@ import static org.hamcrest.Matchers.*;
 @Transactional
 @SpringBootTest(
         properties = "db.name=test",
-        webEnvironment = SpringBootTest.WebEnvironment.NONE)
+        webEnvironment = SpringBootTest.WebEnvironment.NONE,
+        classes = ShareItApp.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemServiceTest {
     private final EntityManager em;

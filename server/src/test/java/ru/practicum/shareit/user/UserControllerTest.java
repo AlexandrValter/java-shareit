@@ -62,32 +62,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void test2_tryCreateUserWhenUserIsNotValid() {
-        User nullEmail = new User();
-        nullEmail.setName("Test1");
-        User notValidEmail = new User();
-        notValidEmail.setName("Test2");
-        notValidEmail.setEmail("test.com");
-        try {
-            mvc.perform(post("/users")
-                            .content(mapper.writeValueAsString(nullEmail))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().is(400));
-            mvc.perform(post("/users")
-                            .content(mapper.writeValueAsString(notValidEmail))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().is(400));
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Test
-    public void test3_tryUpdateUser() {
+    public void test2_tryUpdateUser() {
         User update = new User();
         update.setName("Update");
         update.setEmail("update@yandex.ru");
@@ -110,7 +85,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void test4_tryGetUserById() {
+    public void test3_tryGetUserById() {
         when(userService.getUser(Mockito.anyLong()))
                 .thenReturn(user);
         try {
@@ -128,7 +103,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void test5_tryGetAllUsers() {
+    public void test4_tryGetAllUsers() {
         User user1 = new User(2L, "New name", "new@ya.ru");
         List<User> userList = List.of(user, user1);
         when(userService.getAllUsers())
@@ -152,7 +127,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void test6_tryDeleteUserById() {
+    public void test5_tryDeleteUserById() {
         try {
             mvc.perform(delete("/users/{userId}", 1)
                             .characterEncoding(StandardCharsets.UTF_8)

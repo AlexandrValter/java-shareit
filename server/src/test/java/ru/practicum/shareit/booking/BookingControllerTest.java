@@ -83,36 +83,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void test2_createBookingWhenBookingIsNotValid() {
-        bookingDto.setStart(LocalDateTime.now().minusDays(5));
-        try {
-            mvc.perform(post("/bookings")
-                            .content(mapper.writeValueAsString(bookingDto))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .header("X-Sharer-User-Id", 1))
-                    .andExpect(status().is(400));
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        bookingDto.setStart(LocalDateTime.now().plusDays(5));
-        bookingDto.setEnd(LocalDateTime.now().minusDays(5));
-        try {
-            mvc.perform(post("/bookings")
-                            .content(mapper.writeValueAsString(bookingDto))
-                            .characterEncoding(StandardCharsets.UTF_8)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .header("X-Sharer-User-Id", 1))
-                    .andExpect(status().is(400));
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Test
-    public void test3_tryGetBooking() {
+    public void test2_tryGetBooking() {
         when(bookingService.getBooking(Mockito.anyLong(), Mockito.anyLong()))
                 .thenReturn(booking1);
         try {
@@ -129,7 +100,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void test4_tryChangeStatus() {
+    public void test3_tryChangeStatus() {
         booking1.setStatus(Status.APPROVED);
         when(bookingService.changeStatus(booking1.getId(), true, user.getId()))
                 .thenReturn(booking1);
@@ -148,7 +119,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void test5_tryGetAllBooking() {
+    public void test4_tryGetAllBooking() {
         when(bookingService.getAllBooking(Mockito.any(BookingDtoState.class), Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(List.of(booking1, booking2));
         try {
@@ -169,7 +140,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void test6_tryGetAllBookingByOwner() {
+    public void test5_tryGetAllBookingByOwner() {
         when(bookingService.getAllBookingByOwner(Mockito.any(BookingDtoState.class), Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(List.of(booking1, booking2));
         try {
